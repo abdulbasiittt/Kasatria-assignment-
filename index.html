@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasatria Data Visualization</title>
+
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Three.js Import Map -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.179.1/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.179.1/examples/jsm/"
+        }
+    }
+    </script>
+</head>
+
+<body>
+
+    <!-- Login Screen -->
+    <div class="login-screen">
+
+        <div class="login-card">
+
+            <h1>Kasatria Data Visualization</h1>
+
+            <p class="login-description">
+                Sign in with your Google account to continue.
+            </p>
+
+            <!-- Google Sign-In -->
+            <div
+                id="g_id_onload"
+                data-client_id="915000548685-k634iijtgt1i0fk9fq2bgebfpckq9jmf.apps.googleusercontent.com"
+                data-callback="handleCredentialResponse"
+                data-auto_prompt="false">
+            </div>
+
+            <div
+                class="g_id_signin"
+                data-type="standard"
+                data-size="large"
+                data-theme="outline"
+                data-text="signin_with"
+                data-shape="rectangular">
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Main Application -->
+    <div id="app" class="app-screen">
+
+        <!-- Header -->
+        <header class="app-header">
+
+            <div>
+                <h1>Kasatria Data Visualization</h1>
+                <p>Interactive Data Periodic Table</p>
+            </div>
+
+            <!-- User Information -->
+            <div class="user-info">
+                <span id="user-name"></span>
+                <span id="user-email"></span>
+            </div>
+
+        </header>
+
+        <!-- Arrangement Controls -->
+        <div class="controls">
+
+            <button id="table-button">Table</button>
+            <button id="sphere-button">Sphere</button>
+            <button id="helix-button">Double Helix</button>
+            <button id="grid-button">Grid</button>
+
+        </div>
+
+        <!-- Three.js Visualization -->
+        <section id="visualization">
+        </section>
+
+        <!-- Net Worth Legend -->
+        <div class="net-worth-legend">
+            <span class="legend-label">LOW</span>
+            <div class="legend-gradient"></div>
+            <span class="legend-label">HIGH</span>
+        </div>
+
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+    <script type="module" src="js/periodic-table.js"></script>
+
+</body>
+</html>
