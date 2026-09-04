@@ -462,41 +462,12 @@ function transformSphere() {
     currentArrangement =
         "sphere";
 }
-
-function transformDoubleHelix() {
-    const radius = 600;
-    const verticalSpacing = 100;
-    const turns = 3;
-
-    const total = objects.length;
-    const pointsPerStrand = Math.ceil(total / 2);
-
-    objects.forEach((object, index) => {
-        const strand = index % 2;
-        const strandIndex = Math.floor(index / 2);
-
-        const angle =
-            (strandIndex / pointsPerStrand) *
-            (Math.PI * 2 * turns) +
-            (strand === 1 ? Math.PI : 0);
-
-        object.position.x = radius * Math.cos(angle);
-
-        object.position.y =
-            (strandIndex - (pointsPerStrand - 1) / 2) *
-            verticalSpacing;
-
-        object.position.z = radius * Math.sin(angle);
-
-        object.rotation.x = 0;
-        object.rotation.y = 0;
-        object.rotation.z = 0;
+document
+    .getElementById("helix-button")
+    .addEventListener("click", () => {
+        console.log("Helix button clicked");
+        setActiveButton("helix-button");
     });
-
-    currentArrangement = "helix";
-
-    console.log("Double helix arrangement applied.");
-}
 function transformGrid() {
 
     const separationX =
