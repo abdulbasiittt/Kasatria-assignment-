@@ -54,10 +54,10 @@ function init() {
     renderer = new CSS3DRenderer();
 
     const width =
-        visualization.clientWidth;
+        visualization.clientWidth || window.innerWidth;
 
     const height =
-        visualization.clientHeight;
+        visualization.clientHeight || window.innerHeight;
 
     renderer.setSize(
         width,
@@ -154,7 +154,6 @@ async function loadSheetData() {
         );
 
         console.error(error);
-
     }
 }
 
@@ -357,13 +356,11 @@ function getNetWorthColour(value) {
         return "rgba(220, 50, 50, 0.85)";
     }
 
-    else if (amount > 200000) {
+    if (amount > 200000) {
         return "rgba(50, 180, 80, 0.85)";
     }
 
-    else {
-        return "rgba(240, 150, 40, 0.85)";
-    }
+    return "rgba(240, 150, 40, 0.85)";
 }
 
 function transformTable() {
@@ -382,19 +379,13 @@ function transformTable() {
         const row =
             Math.floor(index / 20);
 
-        const x =
+        object.position.x =
             (column - 9.5) *
             separationX;
 
-        const y =
+        object.position.y =
             -(row - 4.5) *
             separationY;
-
-        object.position.x =
-            x;
-
-        object.position.y =
-            y;
 
         object.position.z =
             0;
@@ -411,6 +402,10 @@ function transformTable() {
 
     currentArrangement =
         "table";
+
+    console.log(
+        "Table arrangement applied: 20 x 10"
+    );
 }
 
 function transformSphere() {
@@ -420,6 +415,10 @@ function transformSphere() {
 
     const total =
         objects.length;
+
+    if (total === 0) {
+        return;
+    }
 
     objects.forEach((object, index) => {
 
@@ -461,14 +460,108 @@ function transformSphere() {
 
     currentArrangement =
         "sphere";
+
+    console.log(
+        "Sphere arrangement applied."
+    );
 }
-document
-    .getElementById("helix-button")
-    .addEventListener("click", () => {
-        console.log("Helix button clicked");
-        setActiveButton("helix-button");
+
+function transformDoubleHelix() {
+
+    const radius =
+        650;
+
+    const height =
+        3000;
+
+    const turns =
+        3;
+
+    const total =
+        objects.length;
+
+    if (total === 0) {
+        console.warn(
+            "No objects available for helix."
+        );
+        return;
+    }
+
+    const pointsPerStrand =
+        Math.ceil(total / 2);
+
+    objects.forEach((object, index) => {
+
+        const strand =
+            index % 2;
+
+        const strandIndex =
+            Math.floor(index / 2);
+
+        const progress =
+            pointsPerStrand <= 1
+                ? 0
+                : strandIndex /
+                  (pointsPerStrand - 1);
+
+        const angle =
+            progress *
+            Math.PI *
+            2 *
+            turns +
+            (strand === 1
+                ? Math.PI
+                : 0);
+
+        const x =
+            radius *
+            Math.cos(angle);
+
+        const y =
+            (0.5 - progress) *
+            height;
+
+        const z =
+            radius *
+            Math.sin(angle);
+
+        object.position.x =
+            x;
+
+        object.position.y =
+            y;
+
+        object.position.z =
+            z;
+
+        object.rotation.x =
+            0;
+
+        object.rotation.y =
+            0;
+
+        object.rotation.z =
+            0;
     });
+
+    currentArrangement =
+        "helix";
+
+    console.log(
+        "Double helix arrangement applied."
+    );
+}
+
 function transformGrid() {
+
+    const columns =
+        5;
+
+    const rows =
+        4;
+
+    const depth =
+        10;
 
     const separationX =
         450;
@@ -476,16 +569,30 @@ function transformGrid() {
     const separationY =
         280;
 
+    const separationZ =
+        450;
+
     objects.forEach((object, index) => {
 
-        const columns =
-            6;
+        const layerSize =
+            columns * rows;
+
+        const layer =
+            Math.floor(
+                index / layerSize
+            );
+
+        const positionInLayer =
+            index % layerSize;
 
         const column =
-            index % columns;
+            positionInLayer % columns;
 
         const row =
-            Math.floor(index / columns);
+            Math.floor(
+                positionInLayer /
+                columns
+            );
 
         object.position.x =
             (column -
@@ -493,11 +600,14 @@ function transformGrid() {
             separationX;
 
         object.position.y =
-            -(row - 4) *
+            -(row -
+                (rows - 1) / 2) *
             separationY;
 
         object.position.z =
-            0;
+            (layer -
+                (depth - 1) / 2) *
+            separationZ;
 
         object.rotation.x =
             0;
@@ -511,6 +621,10 @@ function transformGrid() {
 
     currentArrangement =
         "grid";
+
+    console.log(
+        "Grid arrangement applied: 5 x 4 x 10"
+    );
 }
 
 function setActiveButton(buttonId) {
@@ -526,11 +640,16 @@ function setActiveButton(buttonId) {
             );
         });
 
-    document
-        .getElementById(buttonId)
-        .classList.add(
+    const button =
+        document.getElementById(
+            buttonId
+        );
+
+    if (button) {
+        button.classList.add(
             "active"
         );
+    }
 }
 
 function parseCSV(csv) {
@@ -584,7 +703,8 @@ function parseCSVLine(line) {
 
     const result = [];
 
-    let current = "";
+    let current =
+        "";
 
     let insideQuotes =
         false;
@@ -620,17 +740,23 @@ function parseCSVLine(line) {
             !insideQuotes
         ) {
 
-            result.push(current);
+            result.push(
+                current
+            );
 
-            current = "";
+            current =
+                "";
 
         } else {
 
-            current += character;
+            current +=
+                character;
         }
     }
 
-    result.push(current);
+    result.push(
+        current
+    );
 
     return result;
 }
@@ -647,10 +773,12 @@ function onWindowResize() {
     }
 
     const width =
-        visualization.clientWidth;
+        visualization.clientWidth ||
+        window.innerWidth;
 
     const height =
-        visualization.clientHeight;
+        visualization.clientHeight ||
+        window.innerHeight;
 
     if (
         width === 0 ||
@@ -669,7 +797,9 @@ function onWindowResize() {
         height
     );
 
-    controls.handleResize();
+    if (controls) {
+        controls.handleResize();
+    }
 }
 
 function animate() {
