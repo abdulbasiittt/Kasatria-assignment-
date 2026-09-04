@@ -150,6 +150,13 @@ function init() {
     controls.minDistance = 500;
     controls.maxDistance = 10000;
     controls.rotateSpeed = 0.5;
+    controls.zoomSpeed = 1.2;
+    controls.panSpeed = 0.8;
+
+    controls.mouseButtons = {
+    LEFT: THREE.MOUSE.ROTATE,
+    MIDDLE: THREE.MOUSE.ZOOM,
+    RIGHT: THREE.MOUSE.PAN
 
     window.addEventListener(
         "resize",
