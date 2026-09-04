@@ -144,6 +144,20 @@ body {
     overflow: hidden;
 
     background: #ffffff;
+
+    touch-action: none;
+}
+
+#visualization > div {
+    position: absolute !important;
+
+    top: 0;
+    left: 0;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    z-index: 1;
 }
 
 /* Arrangement Controls */
@@ -156,7 +170,7 @@ body {
 
     transform: translateX(-50%);
 
-    z-index: 100;
+    z-index: 1000;
 
     display: flex;
     gap: 10px;
