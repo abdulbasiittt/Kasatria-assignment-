@@ -464,9 +464,9 @@ function transformSphere() {
 }
 
 function transformDoubleHelix() {
-    const radius = 900;
-    const verticalSpacing = 120;
-    const turns = 5;
+    const radius = 600;
+    const verticalSpacing = 100;
+    const turns = 3;
 
     const total = objects.length;
     const pointsPerStrand = Math.ceil(total / 2);
@@ -475,39 +475,27 @@ function transformDoubleHelix() {
         const strand = index % 2;
         const strandIndex = Math.floor(index / 2);
 
-        const angleStep =
-            (Math.PI * 2 * turns) / pointsPerStrand;
+        const angle =
+            (strandIndex / pointsPerStrand) *
+            (Math.PI * 2 * turns) +
+            (strand === 1 ? Math.PI : 0);
 
-        let angle = strandIndex * angleStep;
+        object.position.x = radius * Math.cos(angle);
 
-        if (strand === 1) {
-            angle += Math.PI;
-        }
-
-        const x = radius * Math.cos(angle);
-        const z = radius * Math.sin(angle);
-
-        const y =
-            -(strandIndex -
-                (pointsPerStrand - 1) / 2) *
+        object.position.y =
+            (strandIndex - (pointsPerStrand - 1) / 2) *
             verticalSpacing;
 
-        object.position.x = x;
-        object.position.y = y;
-        object.position.z = z;
+        object.position.z = radius * Math.sin(angle);
 
-        object.lookAt(
-            new THREE.Vector3(
-                x * 2,
-                y,
-                z * 2
-            )
-        );
+        object.rotation.x = 0;
+        object.rotation.y = 0;
+        object.rotation.z = 0;
     });
 
     currentArrangement = "helix";
 
-    console.log("True double helix arrangement applied.");
+    console.log("Double helix arrangement applied.");
 }
 function transformGrid() {
 
