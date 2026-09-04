@@ -465,77 +465,48 @@ function transformSphere() {
 
 function transformDoubleHelix() {
 
-    const radius =
-        1500;
+    const radius = 1200;
+    const verticalSpacing = 110;
+    const angleStep = 0.35;
 
-    const verticalSpacing =
-        140;
-
-    const angleStep =
-        0.45;
+    const total = objects.length;
+    const positionsPerStrand = Math.ceil(total / 2);
 
     objects.forEach((object, index) => {
 
-        const strand =
-            index % 2;
-
-        const position =
-            Math.floor(index / 2);
+        const strand = index % 2;
+        const position = Math.floor(index / 2);
 
         const angle =
-            position *
-            angleStep;
+            position * angleStep +
+            (strand === 0 ? 0 : Math.PI);
 
         const x =
-            radius *
-            Math.cos(angle);
+            radius * Math.cos(angle);
 
         const y =
             (position -
-                Math.floor(
-                    objects.length / 4
-                )) *
+                (positionsPerStrand - 1) / 2) *
             verticalSpacing;
 
         const z =
-            radius *
-            Math.sin(angle);
+            radius * Math.sin(angle);
 
-        if (strand === 0) {
+        object.position.x = x;
+        object.position.y = y;
+        object.position.z = z;
 
-            object.position.x =
-                x;
-
-            object.position.y =
-                y;
-
-            object.position.z =
-                z;
-
-        } else {
-
-            object.position.x =
-                -x;
-
-            object.position.y =
-                y;
-
-            object.position.z =
-                -z;
-        }
-
-        const vector =
+        const lookAtPoint =
             new THREE.Vector3(
-                0,
-                object.position.y,
-                0
+                x * 2,
+                y,
+                z * 2
             );
 
-        object.lookAt(vector);
+        object.lookAt(lookAtPoint);
     });
 
-    currentArrangement =
-        "helix";
+    currentArrangement = "helix";
 }
 
 function transformGrid() {
