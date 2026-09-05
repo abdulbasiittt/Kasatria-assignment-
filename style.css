@@ -271,3 +271,15 @@ body {
 
     border-radius: 7px;
 }
+#visualization {
+    cursor: grab;
+    touch-action: none;
+}
+
+#visualization:active {
+    cursor: grabbing;
+}
+
+#visualization > div {
+    pointer-events: auto;
+}
